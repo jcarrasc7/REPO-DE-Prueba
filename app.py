@@ -77,12 +77,11 @@ with tabs[0]:
     st.plotly_chart(fig_corr, use_container_width=True)
 
 
-fig = px.imshow(
-    df.corr(numeric_only=True),
-    text_auto=True,
-    color_continuous_scale="Blues",
-    aspect="auto",
-    title="Correlation Matrix"
+fig = px.scatter_matrix(
+    df,
+    dimensions=df.select_dtypes(include=["float", "int"]).columns,
+    color="Species",
+    title="Relationships Between Variables",
 )
 st.plotly_chart(fig, use_container_width=True)
 
