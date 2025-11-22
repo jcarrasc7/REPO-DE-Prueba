@@ -1,35 +1,32 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-from mpl_toolkits.mplot3d import Axes3D
-
+import plotly.express as px
+import plotly.figure_factory as ff
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 # ---------------------------------------------------
-# CONFIGURACIÓN GENERAL
+# CONFIG GLOBAL (estética compacta)
 # ---------------------------------------------------
-st.set_page_config(page_title="Iris Classifier Dashboard", layout="wide")
+st.set_page_config(page_title="Iris Dashboard", layout="wide")
 
-# Reducir tamaño general de letra
 st.markdown("""
     <style>
         body { font-size: 14px; }
-        .stMetric { font-size: 14px !important; }
-        .css-1aqf2og { font-size: 14px !important; }
+        .stPlotlyChart { height: 300px !important; }
+        .css-1d391kg { padding: 0rem 1rem; }
     </style>
 """, unsafe_allow_html=True)
 
 st.title("🌸 Iris Species Classification Dashboard")
 
 # ---------------------------------------------------
-# CARGA DEL DATASET
+# LOAD DATASET
 # ---------------------------------------------------
-st.sidebar.header("Carga del dataset")
-uploaded = st.sidebar.file_uploader("Sube el archivo Iris.csv", type=["csv"])
+st.sidebar.header("Dataset Loader")
+uploaded = st.sidebar.file_uploader("Upload Iris.csv", type=["csv"])
 
 if uploaded:
     df = pd.read_csv(uploaded)
@@ -39,53 +36,64 @@ else:
 if "Id" in df.columns:
     df = df.drop(columns=["Id"])
 
-
 # ---------------------------------------------------
 # TABS
 # ---------------------------------------------------
-tabs = st.tabs(["📊 Exploración del Dataset", 
-                "🤖 Modelo de Clasificación", 
-                "🔮 Predicción Manual"])
+tabs = st.tabs([
+    "📊 Dataset Overview",
+    "🤖 Model Training",
+    "🔮 Prediction"
+])
 
 # ===================================================
-# 📊 TAB 1 — Exploración del Dataset
+# 📊 TAB 1 — Dataset Overview
 # ===================================================
 with tabs[0]:
 
-    st.subheader("Resumen del Dataset")
-
-    # Mostrar solo 8 filas en vez de 150 (para estética)
+    st.subheader("Quick Preview")
     st.dataframe(df.head(8), use_container_width=True)
 
-    # Mostrar resumen breve
-    st.write(f"**Total de muestras:** {df.shape[0]}")
-    st.write(f"**Características:** {df.shape[1] - 1}")
-    st.write(f"**Clases disponibles:** {df['Species'].nunique()}")
+    colA, colB, colC = st.columns(3)
+    colA.metric("Rows", df.shape[0])
+    colB.metric("Columns", df.shape[1])
+    colC.metric("Classes", df["Species"].nunique())
 
     # -----------------------------
-    # Distribución de especies
+    # Class Balance (Plotly Bar)
     # -----------------------------
-    st.subheader("Distribución de especies")
-    fig, ax = plt.subplots(figsize=(5,3))
-    sns.countplot(data=df, x="Species", ax=ax)
-    ax.set_xlabel("")
-    st.pyplot(fig)
+    st.subheader("Class Balance")
+    fig_bar = px.bar(
+        df,
+        x="Species",
+        color="Species",
+        title="",
+        color_discrete_sequence=px.colors.qualitative.Set3
+    )
+    fig_bar.update_layout(height=300, margin=dict(l=20, r=20, t=20, b=20))
+    st.plotly_chart(fig_bar, use_container_width=True)
 
     # -----------------------------
-    # Matriz de correlación
+    # Correlation Matrix (Plotly)
     # -----------------------------
-    st.subheader("Matriz de correlación")
-    fig, ax = plt.subplots(figsize=(5,3))
-    sns.heatmap(df.corr(numeric_only=True), annot=True, cmap="coolwarm", ax=ax)
-    st.pyplot(fig)
+    st.subheader("Correlation Heatmap")
+    corr = df.corr(numeric_only=True)
+    fig_corr = ff.create_annotated_heatmap(
+        z=corr.values,
+        x=list(corr.columns),
+        y=list(corr.columns),
+        colorscale="Blues",
+        showscale=True
+    )
+    fig_corr.update_layout(height=300, margin=dict(l=10, r=10, t=20, b=20))
+    st.plotly_chart(fig_corr, use_container_width=True)
 
 
 # ===================================================
-# 🤖 TAB 2 — Entrenamiento del Modelo
+# 🤖 TAB 2 — Model Training
 # ===================================================
 with tabs[1]:
 
-    st.subheader("Entrenamiento del modelo")
+    st.subheader("Model Training")
 
     X = df.drop(columns=["Species"])
     y = df["Species"]
@@ -101,9 +109,8 @@ with tabs[1]:
     model = RandomForestClassifier(n_estimators=120, random_state=42)
     model.fit(X_train_scaled, y_train)
 
-    st.success("Modelo entrenado con éxito")
+    st.success("Model trained successfully!")
 
-    # Métricas
     y_pred = model.predict(X_test_scaled)
 
     col1, col2, col3, col4 = st.columns(4)
@@ -114,49 +121,51 @@ with tabs[1]:
 
 
 # ===================================================
-# 🔮 TAB 3 — Predicción Manual + Gráfico 3D
+# 🔮 TAB 3 — Prediction
 # ===================================================
 with tabs[2]:
 
-    st.subheader("Ingresar características:")
+    st.subheader("Enter measurements to predict species")
 
     colA, colB = st.columns(2)
     with colA:
-        s1 = st.number_input("SepalLengthCm", min_value=0.0, max_value=10.0, value=5.4)
-        s2 = st.number_input("SepalWidthCm", min_value=0.0, max_value=10.0, value=3.0)
+        s1 = st.number_input("Sepal Length", min_value=0.0, max_value=10.0, value=5.4)
+        s2 = st.number_input("Sepal Width",  min_value=0.0, max_value=10.0, value=3.0)
     with colB:
-        s3 = st.number_input("PetalLengthCm", min_value=0.0, max_value=10.0, value=4.5)
-        s4 = st.number_input("PetalWidthCm", min_value=0.0, max_value=10.0, value=1.5)
+        s3 = st.number_input("Petal Length", min_value=0.0, max_value=10.0, value=4.5)
+        s4 = st.number_input("Petal Width",  min_value=0.0, max_value=10.0, value=1.5)
 
-    if st.button("Predecir especie"):
+    if st.button("Predict"):
         sample = [[s1, s2, s3, s4]]
         sample_scaled = scaler.transform(sample)
         pred = model.predict(sample_scaled)[0]
 
-        st.success(f"🌼 La especie predicha es: **{pred}**")
+        st.success(f"🌼 Predicted Species: **{pred}**")
 
-        st.subheader("3D — Muestra predicha en el espacio")
+        # -------------------------
+        # 3D Scatter (Plotly)
+        # -------------------------
+        st.subheader("3D Visualization")
 
-        fig = plt.figure(figsize=(7,5))
-        ax = fig.add_subplot(111, projection='3d')
+        fig3d = px.scatter_3d(
+            df,
+            x="SepalLengthCm",
+            y="SepalWidthCm",
+            z="PetalLengthCm",
+            color="Species",
+            opacity=0.7,
+            height=400
+        )
 
-        for species in df["Species"].unique():
-            subset = df[df["Species"] == species]
-            ax.scatter(
-                subset["SepalLengthCm"],
-                subset["SepalWidthCm"],
-                subset["PetalLengthCm"],
-                label=species
-            )
+        # Add prediction point
+        fig3d.add_scatter3d(
+            x=[s1], y=[s2], z=[s3],
+            mode='markers',
+            marker=dict(size=6, color="black", symbol="x"),
+            name="New Sample"
+        )
 
-        ax.scatter(s1, s2, s3, color="black", s=120, marker="X", label="Nueva muestra")
-
-        ax.set_xlabel("SepalLengthCm")
-        ax.set_ylabel("SepalWidthCm")
-        ax.set_zlabel("PetalLengthCm")
-        ax.legend()
-
-        st.pyplot(fig)
+        st.plotly_chart(fig3d, use_container_width=True)
 
 
 
