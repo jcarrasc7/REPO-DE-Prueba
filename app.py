@@ -9,12 +9,14 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
+# ---------------------------------------------------
+# CONFIGURACIÓN GENERAL
+# ---------------------------------------------------
 st.set_page_config(page_title="Iris Classifier Dashboard", layout="wide")
-
 st.title("🌸 Iris Species Classification Dashboard")
 
 # ---------------------------------------------------
-# CARGA DEL DATASET (PDF LO PIDE)
+# CARGA DEL DATASET
 # ---------------------------------------------------
 st.sidebar.header("Carga del dataset")
 uploaded = st.sidebar.file_uploader("Sube el archivo Iris.csv", type=["csv"])
@@ -22,19 +24,21 @@ uploaded = st.sidebar.file_uploader("Sube el archivo Iris.csv", type=["csv"])
 if uploaded:
     df = pd.read_csv(uploaded)
 else:
-    df = pd.read_csv("Iris.csv")
+    df = pd.read_csv("Iris.csv")  # Carga automática sin mensajes
 
-# limpiar si tiene Id
+# Limpiar ID si existe
 if "Id" in df.columns:
     df = df.drop(columns=["Id"])
 
 # ---------------------------------------------------
-# TABS PRINCIPALES (para que se vea profesional)
+# TABS SEGÚN LO QUE PIDE EL PDF
 # ---------------------------------------------------
-tabs = st.tabs(["📊 Exploración del Dataset", "🤖 Modelo de Clasificación", "🔮 Predicción Manual"])
+tabs = st.tabs(["📊 Exploración del Dataset", 
+                "🤖 Modelo de Clasificación", 
+                "🔮 Predicción Manual"])
 
 # ===================================================
-# 📊 TAB 1 — EDA
+# 📊 TAB 1 — Exploración del Dataset (EDA)
 # ===================================================
 with tabs[0]:
 
@@ -42,22 +46,17 @@ with tabs[0]:
     st.dataframe(df, use_container_width=True)
 
     st.subheader("Distribución de especies")
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(6,4))
     sns.countplot(data=df, x="Species", ax=ax)
     st.pyplot(fig)
 
-    st.subheader("Histogramas de las características")
-    fig = df.hist(figsize=(10, 6))
-    st.pyplot(plt.gcf())
-
     st.subheader("Matriz de correlación")
-    fig, ax = plt.subplots(figsize=(7, 5))
+    fig, ax = plt.subplots(figsize=(7,5))
     sns.heatmap(df.corr(numeric_only=True), annot=True, cmap="coolwarm", ax=ax)
     st.pyplot(fig)
 
-
 # ===================================================
-# 🤖 TAB 2 — Entrenamiento del Modelo
+# 🤖 TAB 2 — Entrenamiento del Modelo (OBLIGATORIO PDF)
 # ===================================================
 with tabs[1]:
 
@@ -79,7 +78,9 @@ with tabs[1]:
 
     st.success("Modelo entrenado con éxito")
 
+    # -----------------------
     # MÉTRICAS
+    # -----------------------
     y_pred = model.predict(X_test_scaled)
 
     col1, col2, col3, col4 = st.columns(4)
@@ -88,9 +89,8 @@ with tabs[1]:
     col3.metric("Recall", f"{recall_score(y_test, y_pred, average='macro'):.3f}")
     col4.metric("F1-score", f"{f1_score(y_test, y_pred, average='macro'):.3f}")
 
-
 # ===================================================
-# 🔮 TAB 3 — Predicción Manual + 3D Scatter
+# 🔮 TAB 3 — Predicción Manual + Gráfico 3D (OBLIGATORIO PDF)
 # ===================================================
 with tabs[2]:
 
@@ -111,6 +111,9 @@ with tabs[2]:
 
         st.success(f"🌼 La especie predicha es: **{pred}**")
 
+        # -------------------------
+        # GRÁFICO 3D CON PREDICCIÓN
+        # -------------------------
         st.subheader("Visualización 3D con la muestra predicha")
 
         fig = plt.figure(figsize=(8, 6))
@@ -125,7 +128,14 @@ with tabs[2]:
                 label=species
             )
 
-        ax.scatter(s1, s2, s3, color="black", s=120, marker="X", label="Nueva muestra")
+        # Punto predicho
+        ax.scatter(
+            s1, s2, s3,
+            color="black",
+            s=120,
+            marker="X",
+            label="Nueva muestra"
+        )
 
         ax.set_xlabel("SepalLengthCm")
         ax.set_ylabel("SepalWidthCm")
@@ -133,6 +143,7 @@ with tabs[2]:
         ax.legend()
 
         st.pyplot(fig)
+
 
 
 
