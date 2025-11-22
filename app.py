@@ -7,9 +7,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-# ---------------------------------------------------
-# CONFIG GLOBAL (estética compacta)
-# ---------------------------------------------------
 st.set_page_config(page_title="Iris Dashboard", layout="wide")
 
 st.markdown("""
@@ -20,11 +17,10 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("🌸 Iris Species Classification Dashboard")
+st.title(" Iris Species Classification")
 
-# ---------------------------------------------------
+
 # LOAD DATASET
-# ---------------------------------------------------
 st.sidebar.header("Dataset Loader")
 uploaded = st.sidebar.file_uploader("Upload Iris.csv", type=["csv"])
 
@@ -36,18 +32,14 @@ else:
 if "Id" in df.columns:
     df = df.drop(columns=["Id"])
 
-# ---------------------------------------------------
 # TABS
-# ---------------------------------------------------
 tabs = st.tabs([
-    "📊 Dataset Overview",
-    "🤖 Model Training",
-    "🔮 Prediction"
+    " Dataset Overview",
+    "Model Training",
+    "Prediction"
 ])
 
-# ===================================================
-# 📊 TAB 1 — Dataset Overview
-# ===================================================
+#  TAB 1 — Dataset Overview
 with tabs[0]:
 
     st.subheader("Quick Preview")
@@ -58,9 +50,7 @@ with tabs[0]:
     colB.metric("Columns", df.shape[1])
     colC.metric("Classes", df["Species"].nunique())
 
-    # -----------------------------
     # Class Balance (Plotly Bar)
-    # -----------------------------
     st.subheader("Class Balance")
     fig_bar = px.bar(
         df,
@@ -71,10 +61,9 @@ with tabs[0]:
     )
     fig_bar.update_layout(height=300, margin=dict(l=20, r=20, t=20, b=20))
     st.plotly_chart(fig_bar, use_container_width=True)
+    
 
-    # -----------------------------
     # Correlation Matrix (Plotly)
-    # -----------------------------
     st.subheader("Correlation Heatmap")
     corr = df.corr(numeric_only=True)
     fig_corr = ff.create_annotated_heatmap(
@@ -86,11 +75,10 @@ with tabs[0]:
     )
     fig_corr.update_layout(height=300, margin=dict(l=10, r=10, t=20, b=20))
     st.plotly_chart(fig_corr, use_container_width=True)
+    
 
+#  TAB 2 — Model Training
 
-# ===================================================
-# 🤖 TAB 2 — Model Training
-# ===================================================
 with tabs[1]:
 
     st.subheader("Model Training")
@@ -120,9 +108,8 @@ with tabs[1]:
     col4.metric("F1-score", f"{f1_score(y_test, y_pred, average='macro'):.3f}")
 
 
-# ===================================================
-# 🔮 TAB 3 — Prediction
-# ===================================================
+#  TAB 3 — Prediction
+
 with tabs[2]:
 
     st.subheader("Enter measurements to predict species")
@@ -140,11 +127,10 @@ with tabs[2]:
         sample_scaled = scaler.transform(sample)
         pred = model.predict(sample_scaled)[0]
 
-        st.success(f"🌼 Predicted Species: **{pred}**")
+        st.success(f" Predicted Species: **{pred}**")
 
-        # -------------------------
+       
         # 3D Scatter (Plotly)
-        # -------------------------
         st.subheader("3D Visualization")
 
         fig3d = px.scatter_3d(
