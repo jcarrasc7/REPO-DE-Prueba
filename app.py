@@ -10,12 +10,8 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 st.title(" Iris Species Classifier — Streamlit App")
+df = pd.read_csv("Iris.csv")
 
-# ---------------------------------------------------
-# CARGA DEL DATASET
-# ---------------------------------------------------
-st.sidebar.header("Carga del dataset")
-uploaded = st.sidebar.file_uploader("Sube el archivo Iris.csv", type=["csv"])
 
 if uploaded is not None:
     df = pd.read_csv(uploaded)
