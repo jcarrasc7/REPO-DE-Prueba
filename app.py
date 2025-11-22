@@ -28,53 +28,6 @@ st.dataframe(df, use_container_width=True)
 
 
 # ---------------------------------------------------
-# VISUALIZACIÓN 3D DEL DATASET (EDA)
-# ---------------------------------------------------
-st.subheader("Visualización 3D del dataset (EDA)")
-
-fig = plt.figure(figsize=(8, 6))
-ax = fig.add_subplot(111, projection='3d')
-
-for species in df["Species"].unique():
-    subset = df[df["Species"] == species]
-    ax.scatter(
-        subset["SepalLengthCm"],
-        subset["SepalWidthCm"],
-        subset["PetalLengthCm"],
-        label=species
-    )
-
-ax.set_xlabel("SepalLengthCm")
-ax.set_ylabel("SepalWidthCm")
-ax.set_zlabel("PetalLengthCm")
-ax.legend()
-
-st.pyplot(fig)
-
-
-# ---------------------------------------------------
-# ENTRENAMIENTO DEL MODELO
-# ---------------------------------------------------
-st.subheader("Entrenamiento del Modelo")
-
-X = df.drop(columns=["Species"])
-y = df["Species"]
-
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
-
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
-
-model = RandomForestClassifier(n_estimators=120, random_state=42)
-model.fit(X_train_scaled, y_train)
-
-st.success("Modelo entrenado correctamente")
-
-
-# ---------------------------------------------------
 # PREDICCIÓN MANUAL + VISUALIZACIÓN 3D
 # ---------------------------------------------------
 st.subheader("Predicción manual + Visualización 3D")
