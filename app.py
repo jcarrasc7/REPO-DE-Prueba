@@ -12,14 +12,11 @@ st.title("Iris Species Classifier — Streamlit App")
 st.sidebar.header("Carga del dataset")
 uploaded = st.sidebar.file_uploader("Sube el archivo Iris.csv", type=["csv"])
 
-# Si el usuario sube archivo → úsalo.
-# Si no sube nada → cargar Iris.csv del repositorio.
 if uploaded:
     df = pd.read_csv(uploaded)
-    st.warning("Se cargó el archivo que subiste.")
 else:
     df = pd.read_csv("Iris.csv")
-    st.info("No subiste archivo. Se cargó el dataset por defecto (Iris.csv).")
+
 
 # Eliminar columna Id si existe
 if "Id" in df.columns:
