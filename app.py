@@ -53,7 +53,7 @@ with tabs[0]:
         x="Species",
         color="Species",
         title="",
-        height=650,
+        height=350,
         color_discrete_sequence=px.colors.qualitative.Set3
     )
     fig_bar.update_layout(margin=dict(l=20, r=20, t=20, b=20))
@@ -65,7 +65,7 @@ with tabs[0]:
         dimensions=df.select_dtypes(include=["float", "int"]).columns,
         color="Species",
         title="",
-        height=450
+        height=650
     )
 
     fig_sm.update_layout(
