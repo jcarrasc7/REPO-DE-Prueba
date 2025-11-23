@@ -3,10 +3,13 @@ import pandas as pd
 import plotly.express as px
 import plotly.figure_factory as ff
 from sklearn.model_selection import train_test_split
-import plotly.figure_factory as ff
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import (
+    accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+)
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 st.set_page_config(page_title="Iris Dashboard", layout="wide")
 
@@ -97,19 +100,20 @@ with tabs[1]:
     col4.metric("F1-score", f"{f1_score(y_test, y_pred, average='macro'):.3f}")
 
 
+    # CONFUSION MATRIX
+    
     st.subheader("Confusion Matrix")
 
     cm = confusion_matrix(y_test, y_pred)
 
     fig, ax = plt.subplots(figsize=(3, 3))
-    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=ax, cbar=False)
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Reds", ax=ax, cbar=False)
 
     ax.set_xlabel("Predicted")
     ax.set_ylabel("True")
     st.pyplot(fig, use_container_width=False)
 
 
-    
 # TAB 3 — Prediction
 with tabs[2]:
 
@@ -130,7 +134,6 @@ with tabs[2]:
 
         st.success(f"Predicted Species: {pred}")
 
-        # VISUALIZATION 3D 
         st.subheader("3D Visualization")
 
         fig3d = px.scatter_3d(
@@ -143,7 +146,6 @@ with tabs[2]:
             height=450
         )
         
-        # Prediction point
         fig3d.add_scatter3d(
             x=[s1], y=[s2], z=[s3],
             mode="markers",
@@ -152,4 +154,3 @@ with tabs[2]:
         )
 
         st.plotly_chart(fig3d, use_container_width=True)
-
