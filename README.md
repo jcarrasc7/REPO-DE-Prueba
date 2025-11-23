@@ -32,6 +32,6 @@ streamlit run app.py
 Members: Juan Carrascal (10032) - Karl Luckert Heinz (10919) - Karolaith Orozco (10895)
 
 ## Links
-GitHub Repository: https://github.com/jcarrasc7/Panel-de-control-Universitario-.git  
-Streamlit Dashboard: https://dwnicyhizwudv52qfjd6xo.streamlit.app/
+GitHub Repository: https://github.com/jcarrasc7/REPO-DE-Prueba.git
+Streamlit Dashboard: https://repo-de-prueba-l923sekxmy6ur7mfr9zmys.streamlit.app/
 
