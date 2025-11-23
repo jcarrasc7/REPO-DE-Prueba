@@ -99,18 +99,15 @@ with tabs[1]:
 
     st.subheader("Confusion Matrix")
 
-    from sklearn.metrics import confusion_matrix
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-
-    # Calculate the CM
     cm = confusion_matrix(y_test, y_pred)
 
-    fig, ax = plt.subplots()
-    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=ax)
+    fig, ax = plt.subplots(figsize=(3, 3))
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Reds", ax=ax, cbar=False)
+
     ax.set_xlabel("Predicted")
     ax.set_ylabel("True")
-    st.pyplot(fig)
+    st.pyplot(fig, use_container_width=False)
+
 
     
 # TAB 3 — Prediction
