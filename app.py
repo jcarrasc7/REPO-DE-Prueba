@@ -28,7 +28,7 @@ df = pd.read_csv("Iris.csv")
 
 if "Id" in df.columns:
     df = df.drop(columns=["Id"])
-    
+
 # TABS
 tabs = st.tabs([
     "Dataset Overview",
@@ -36,7 +36,7 @@ tabs = st.tabs([
     "Prediction"
 ])
 
-# TAB 1 — Dataset Overview
+#  TAB 1 
 with tabs[0]:
 
     st.subheader("Quick Preview")
@@ -67,10 +67,17 @@ with tabs[0]:
         title="",
         height=450
     )
+
+    fig_sm.update_layout(
+        xaxis_tickangle=45,
+        yaxis_tickangle=45,
+        margin=dict(l=40, r=40, t=40, b=40)
+    )
+
     st.plotly_chart(fig_sm, use_container_width=True)
 
 
-# TAB 2 — Model Training
+# TAB 2
 with tabs[1]:
 
     st.subheader("Model Training")
@@ -100,7 +107,7 @@ with tabs[1]:
     col4.metric("F1-score", f"{f1_score(y_test, y_pred, average='macro'):.3f}")
 
 
-# TAB 3 — Prediction
+# TAB 3 
 with tabs[2]:
 
     st.subheader("Enter measurements to predict species")
@@ -114,6 +121,7 @@ with tabs[2]:
         s4 = st.number_input("Petal Width", min_value=0.0, max_value=10.0, value=1.5)
 
     if st.button("Predict"):
+
         sample = [[s1, s2, s3, s4]]
         sample_scaled = scaler.transform(sample)
         pred = model.predict(sample_scaled)[0]
@@ -131,7 +139,7 @@ with tabs[2]:
             opacity=0.7,
             height=450
         )
-        
+
         fig3d.add_scatter3d(
             x=[s1], y=[s2], z=[s3],
             mode="markers",
