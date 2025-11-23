@@ -100,20 +100,6 @@ with tabs[1]:
     col4.metric("F1-score", f"{f1_score(y_test, y_pred, average='macro'):.3f}")
 
 
-    # CONFUSION MATRIX
-    
-    st.subheader("Confusion Matrix")
-
-    cm = confusion_matrix(y_test, y_pred)
-
-    fig, ax = plt.subplots(figsize=(3, 3))
-    sns.heatmap(cm, annot=True, fmt="d", cmap="Reds", ax=ax, cbar=False)
-
-    ax.set_xlabel("Predicted")
-    ax.set_ylabel("True")
-    st.pyplot(fig, use_container_width=False)
-
-
 # TAB 3 — Prediction
 with tabs[2]:
 
