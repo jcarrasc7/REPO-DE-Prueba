@@ -1,7 +1,7 @@
 
 # Iris Species Classification Dashboard
 
-This interactive dashboard was developed in Streamlit. The project was first built in Google Colab, later organized into a GitHub repository, and finally deployed in Streamlit according to the professor’s instructions.
+This interactive dashboard was developed in Streamlit. The project was first built in Google Colab, later organized into a GitHub repository, and finally deployed in Streamlit in a interactive dashboard
 
 # Description
 This project is part of the Machine Learning Classification activity.  
