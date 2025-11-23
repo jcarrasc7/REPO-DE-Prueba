@@ -60,14 +60,23 @@ with tabs[0]:
     st.plotly_chart(fig_bar, use_container_width=True)
 
     st.subheader("Relationships Between Variables")
+
+    
+    df_rename = df.rename(columns={
+        "SepalLengthCm": "Sepal Length",
+        "SepalWidthCm": "Sepal Width",
+        "PetalLengthCm": "Petal Length",
+        "PetalWidthCm": "Petal Width"
+    })
+
     fig_sm = px.scatter_matrix(
-        df,
-        dimensions=df.select_dtypes(include=["float", "int"]).columns,
+        df_rename,
+        dimensions=["Sepal Length", "Sepal Width", "Petal Length", "Petal Width"],
         color="Species",
         title="",
         height=650
     )
-
+    
     fig_sm.update_layout(
         xaxis_tickangle=45,
         yaxis_tickangle=45,
@@ -77,7 +86,7 @@ with tabs[0]:
     st.plotly_chart(fig_sm, use_container_width=True)
 
 
-# TAB 2
+# TAB 2 
 with tabs[1]:
 
     st.subheader("Model Training")
@@ -107,7 +116,7 @@ with tabs[1]:
     col4.metric("F1-score", f"{f1_score(y_test, y_pred, average='macro'):.3f}")
 
 
-# TAB 3 
+# TAB 3
 with tabs[2]:
 
     st.subheader("Enter measurements to predict species")
