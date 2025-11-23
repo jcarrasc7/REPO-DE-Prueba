@@ -53,7 +53,7 @@ with tabs[0]:
         x="Species",
         color="Species",
         title="",
-        height=350,
+        height=450,
         color_discrete_sequence=px.colors.qualitative.Set3
     )
     fig_bar.update_layout(margin=dict(l=20, r=20, t=20, b=20))
