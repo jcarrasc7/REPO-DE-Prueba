@@ -96,6 +96,13 @@ with tabs[1]:
     col3.metric("Recall", f"{recall_score(y_test, y_pred, average='macro'):.3f}")
     col4.metric("F1-score", f"{f1_score(y_test, y_pred, average='macro'):.3f}")
 
+
+    st.subheader("Confusion Matrix")
+    fig, ax = plt.subplots()
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=ax)
+    st.pyplot(fig)
+
+    
 # TAB 3 — Prediction
 with tabs[2]:
 
