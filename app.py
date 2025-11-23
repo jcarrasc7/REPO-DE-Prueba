@@ -30,15 +30,13 @@ if "Id" in df.columns:
     df = df.drop(columns=["Id"])
 
 # TABS
-
 tabs = st.tabs([
     "Dataset Overview",
     "Model Training",
     "Prediction"
 ])
 
-
-# TAB 1 DATASET OVERVIEW
+#  TAB 1 
 with tabs[0]:
 
     st.subheader("Quick Preview")
@@ -63,6 +61,7 @@ with tabs[0]:
 
     st.subheader("Relationships Between Variables")
 
+    
     df_rename = df.rename(columns={
         "SepalLengthCm": "Sepal Length",
         "SepalWidthCm": "Sepal Width",
@@ -87,9 +86,7 @@ with tabs[0]:
     st.plotly_chart(fig_sm, use_container_width=True)
 
 
-
-# TAB 2 MODEL TRAINING
-
+# TAB 2 
 with tabs[1]:
 
     st.subheader("Model Training")
@@ -119,38 +116,24 @@ with tabs[1]:
     col4.metric("F1-score", f"{f1_score(y_test, y_pred, average='macro'):.3f}")
 
     
-    # GRÁFIC TRAIN vs TEST 
     st.subheader("Training vs Testing Accuracy")
 
     train_acc = model.score(X_train_scaled, y_train)
     test_acc = accuracy_score(y_test, y_pred)
 
-    fig, ax = plt.subplots(figsize=(6, 4))
-
-    bars = ax.bar(
-        ["Train Accuracy", "Test Accuracy"],
-        [train_acc, test_acc],
-        alpha=0.8
+    fig_acc = px.bar(
+    x=["Train Accuracy", "Test Accuracy"],
+    y=[train_acc, test_acc],
+    title="Train vs Test Accuracy",
+    height=400
     )
 
-    for bar in bars:
-        height = bar.get_height()
-        ax.text(
-            bar.get_x() + bar.get_width() / 2,
-            height + 0.02,
-            f"{height:.2f}",
-            ha="center",
-            fontsize=12,
-            fontweight="bold"
-        )
+    fig_acc.update_layout(yaxis=dict(range=[0,1]))
+    st.plotly_chart(fig_acc, use_container_width=True)
 
-    ax.set_ylim(0, 1.1)
-    ax.set_ylabel("Accuracy")
-    ax.set_title("Model Performance Comparison", fontsize=14)
 
-    st.pyplot(fig)
 
-# TAB 3 PREDICTION
+# TAB 3
 with tabs[2]:
 
     st.subheader("Enter measurements to predict species")
