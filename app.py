@@ -87,6 +87,48 @@ with tabs[0]:
     )
     st.plotly_chart(fig_sm, use_container_width=True)
     
+import plotly.graph_objects as go
+
+corr = df.corr(numeric_only=True)
+
+edges = []
+for i in corr.columns:
+    for j in corr.columns:
+        if i != j:
+            weight = corr.loc[i, j]
+            edges.append((i, j, abs(weight)))
+
+nodes = list(corr.columns)
+
+edge_x = []
+edge_y = []
+for edge in edges:
+    edge_x.append(nodes.index(edge[0]))
+    edge_y.append(nodes.index(edge[2]))
+
+fig = go.Figure(data=go.Scatter(
+    x=edge_x,
+    y=edge_y,
+    mode="markers+text",
+    text=nodes,
+    textposition="bottom center"
+))
+
+fig.update_layout(
+    title="Correlation Network",
+    showlegend=False
+)
+
+st.plotly_chart(fig, use_container_width=True)
+
+
+
+
+
+
+
+
+
 
 # TAB 2 — Model Training
 
