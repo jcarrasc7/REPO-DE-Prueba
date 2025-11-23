@@ -97,7 +97,7 @@ with tabs[1]:
     col4.metric("F1-score", f"{f1_score(y_test, y_pred, average='macro'):.3f}")
 
 
-       st.subheader("Confusion Matrix")
+    st.subheader("Confusion Matrix")
 
     from sklearn.metrics import confusion_matrix
     import matplotlib.pyplot as plt
