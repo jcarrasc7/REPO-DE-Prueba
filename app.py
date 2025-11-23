@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.figure_factory as ff
 from sklearn.model_selection import train_test_split
+import plotly.figure_factory as ff
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
@@ -24,13 +25,15 @@ df = pd.read_csv("Iris.csv")
 
 if "Id" in df.columns:
     df = df.drop(columns=["Id"])
-
+    
+# TABS
 tabs = st.tabs([
     "Dataset Overview",
     "Model Training",
     "Prediction"
 ])
 
+# TAB 1 — Dataset Overview
 with tabs[0]:
 
     st.subheader("Quick Preview")
@@ -63,6 +66,8 @@ with tabs[0]:
     )
     st.plotly_chart(fig_sm, use_container_width=True)
 
+
+# TAB 2 — Model Training
 with tabs[1]:
 
     st.subheader("Model Training")
@@ -91,6 +96,7 @@ with tabs[1]:
     col3.metric("Recall", f"{recall_score(y_test, y_pred, average='macro'):.3f}")
     col4.metric("F1-score", f"{f1_score(y_test, y_pred, average='macro'):.3f}")
 
+# TAB 3 — Prediction
 with tabs[2]:
 
     st.subheader("Enter measurements to predict species")
@@ -110,6 +116,7 @@ with tabs[2]:
 
         st.success(f"Predicted Species: {pred}")
 
+        # VISUALIZATION 3D 
         st.subheader("3D Visualization")
 
         fig3d = px.scatter_3d(
@@ -121,7 +128,8 @@ with tabs[2]:
             opacity=0.7,
             height=450
         )
-
+        
+        # Prediction point
         fig3d.add_scatter3d(
             x=[s1], y=[s2], z=[s3],
             mode="markers",
@@ -130,3 +138,4 @@ with tabs[2]:
         )
 
         st.plotly_chart(fig3d, use_container_width=True)
+
