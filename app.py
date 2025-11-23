@@ -115,6 +115,24 @@ with tabs[1]:
     col3.metric("Recall", f"{recall_score(y_test, y_pred, average='macro'):.3f}")
     col4.metric("F1-score", f"{f1_score(y_test, y_pred, average='macro'):.3f}")
 
+    
+########
+    st.subheader("Training vs Testing Accuracy")
+
+    train_acc = model.score(X_train_scaled, y_train)
+    test_acc = accuracy_score(y_test, y_pred)
+
+    fig_acc = px.bar(
+    x=["Train Accuracy", "Test Accuracy"],
+    y=[train_acc, test_acc],
+    title="Train vs Test Accuracy",
+    height=350
+    )
+
+    fig_acc.update_layout(yaxis=dict(range=[0,1]))
+    st.plotly_chart(fig_acc, use_container_width=True)
+
+
 
 # TAB 3
 with tabs[2]:
