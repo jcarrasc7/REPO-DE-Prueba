@@ -116,7 +116,6 @@ with tabs[1]:
     col4.metric("F1-score", f"{f1_score(y_test, y_pred, average='macro'):.3f}")
 
     
-########
     st.subheader("Training vs Testing Accuracy")
 
     train_acc = model.score(X_train_scaled, y_train)
@@ -126,7 +125,7 @@ with tabs[1]:
     x=["Train Accuracy", "Test Accuracy"],
     y=[train_acc, test_acc],
     title="Train vs Test Accuracy",
-    height=350
+    height=300
     )
 
     fig_acc.update_layout(yaxis=dict(range=[0,1]))
