@@ -97,9 +97,19 @@ with tabs[1]:
     col4.metric("F1-score", f"{f1_score(y_test, y_pred, average='macro'):.3f}")
 
 
-    st.subheader("Confusion Matrix")
+       st.subheader("Confusion Matrix")
+
+    from sklearn.metrics import confusion_matrix
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # Calculate the CM
+    cm = confusion_matrix(y_test, y_pred)
+
     fig, ax = plt.subplots()
     sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=ax)
+    ax.set_xlabel("Predicted")
+    ax.set_ylabel("True")
     st.pyplot(fig)
 
     
