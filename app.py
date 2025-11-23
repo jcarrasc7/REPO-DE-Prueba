@@ -125,7 +125,7 @@ with tabs[1]:
     x=["Train Accuracy", "Test Accuracy"],
     y=[train_acc, test_acc],
     title="Train vs Test Accuracy",
-    height=300
+    height=400
     )
 
     fig_acc.update_layout(yaxis=dict(range=[0,1]))
