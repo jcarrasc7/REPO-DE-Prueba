@@ -7,7 +7,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-
 st.set_page_config(page_title="Iris Dashboard", layout="wide")
 
 st.markdown("""
@@ -19,22 +18,18 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title(" Iris Species Classification Dashboard")
+st.title("Iris Species Classification Dashboard")
 
-# LOAD DATASET
 df = pd.read_csv("Iris.csv")
 
 if "Id" in df.columns:
     df = df.drop(columns=["Id"])
 
-# TABS
 tabs = st.tabs([
     "Dataset Overview",
     "Model Training",
     "Prediction"
 ])
-
-# TAB 1 — Dataset Overview
 
 with tabs[0]:
 
@@ -46,7 +41,6 @@ with tabs[0]:
     colB.metric("Columns", df.shape[1])
     colC.metric("Classes", df["Species"].nunique())
 
-   
     st.subheader("Class Balance")
     fig_bar = px.bar(
         df,
@@ -59,8 +53,6 @@ with tabs[0]:
     fig_bar.update_layout(margin=dict(l=20, r=20, t=20, b=20))
     st.plotly_chart(fig_bar, use_container_width=True)
 
- 
-
     st.subheader("Relationships Between Variables")
     fig_sm = px.scatter_matrix(
         df,
@@ -70,8 +62,6 @@ with tabs[0]:
         height=450
     )
     st.plotly_chart(fig_sm, use_container_width=True)
-    
-# TAB 2 — Model Training
 
 with tabs[1]:
 
@@ -96,13 +86,10 @@ with tabs[1]:
     y_pred = model.predict(X_test_scaled)
 
     col1, col2, col3, col4 = st.columns(4)
-    col1.metric("Accuracy", f"{accuracy_score[y_test, y_pred]:.3f}")
+    col1.metric("Accuracy", f"{accuracy_score(y_test, y_pred):.3f}")
     col2.metric("Precision", f"{precision_score(y_test, y_pred, average='macro'):.3f}")
     col3.metric("Recall", f"{recall_score(y_test, y_pred, average='macro'):.3f}")
     col4.metric("F1-score", f"{f1_score(y_test, y_pred, average='macro'):.3f}")
-
-
-# TAB 3 — Prediction
 
 with tabs[2]:
 
@@ -111,19 +98,18 @@ with tabs[2]:
     colA, colB = st.columns(2)
     with colA:
         s1 = st.number_input("Sepal Length", min_value=0.0, max_value=10.0, value=5.4)
-        s2 = st.number_input("Sepal Width",  min_value=0.0, max_value=10.0, value=3.0)
+        s2 = st.number_input("Sepal Width", min_value=0.0, max_value=10.0, value=3.0)
     with colB:
         s3 = st.number_input("Petal Length", min_value=0.0, max_value=10.0, value=4.5)
-        s4 = st.number_input("Petal Width",  min_value=0.0, max_value=10.0, value=1.5)
+        s4 = st.number_input("Petal Width", min_value=0.0, max_value=10.0, value=1.5)
 
     if st.button("Predict"):
         sample = [[s1, s2, s3, s4]]
         sample_scaled = scaler.transform(sample)
         pred = model.predict(sample_scaled)[0]
 
-        st.success(f" Predicted Species: {pred}")
+        st.success(f"Predicted Species: {pred}")
 
-        # ------------ 3D SCATTER ----------
         st.subheader("3D Visualization")
 
         fig3d = px.scatter_3d(
@@ -136,10 +122,9 @@ with tabs[2]:
             height=450
         )
 
-
         fig3d.add_scatter3d(
             x=[s1], y=[s2], z=[s3],
-            mode='markers',
+            mode="markers",
             marker=dict(size=6, color="black", symbol="x"),
             name="New Sample"
         )
