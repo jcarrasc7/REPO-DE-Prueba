@@ -102,7 +102,7 @@ with tabs[1]:
     cm = confusion_matrix(y_test, y_pred)
 
     fig, ax = plt.subplots(figsize=(3, 3))
-    sns.heatmap(cm, annot=True, fmt="d", cmap="Reds", ax=ax, cbar=False)
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=ax, cbar=False)
 
     ax.set_xlabel("Predicted")
     ax.set_ylabel("True")
