@@ -22,13 +22,7 @@ st.markdown("""
 st.title(" Iris Species Classification Dashboard")
 
 # LOAD DATASET
-st.sidebar.header("Dataset Loader")
-uploaded = st.sidebar.file_uploader("Upload Iris.csv", type=["csv"])
-
-if uploaded:
-    df = pd.read_csv(uploaded)
-else:
-    df = pd.read_csv("Iris.csv")
+df = pd.read_csv("Iris.csv")
 
 if "Id" in df.columns:
     df = df.drop(columns=["Id"])
@@ -102,7 +96,7 @@ with tabs[1]:
     y_pred = model.predict(X_test_scaled)
 
     col1, col2, col3, col4 = st.columns(4)
-    col1.metric("Accuracy", f"{accuracy_score(y_test, y_pred):.3f}")
+    col1.metric("Accuracy", f"{accuracy_score[y_test, y_pred]:.3f}")
     col2.metric("Precision", f"{precision_score(y_test, y_pred, average='macro'):.3f}")
     col3.metric("Recall", f"{recall_score(y_test, y_pred, average='macro'):.3f}")
     col4.metric("F1-score", f"{f1_score(y_test, y_pred, average='macro'):.3f}")
@@ -127,7 +121,7 @@ with tabs[2]:
         sample_scaled = scaler.transform(sample)
         pred = model.predict(sample_scaled)[0]
 
-        st.success(f" Predicted Species: **{pred}**")
+        st.success(f" Predicted Species: {pred}")
 
         # ------------ 3D SCATTER ----------
         st.subheader("3D Visualization")
@@ -142,7 +136,7 @@ with tabs[2]:
             height=450
         )
 
-        # Prediction point
+
         fig3d.add_scatter3d(
             x=[s1], y=[s2], z=[s3],
             mode='markers',
@@ -151,10 +145,3 @@ with tabs[2]:
         )
 
         st.plotly_chart(fig3d, use_container_width=True)
-
-
-
-
-
-
-
